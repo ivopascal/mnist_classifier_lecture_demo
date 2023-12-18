@@ -89,7 +89,7 @@ def predict(img):
         img = img[None,]
         pred = loaded_model(img)[0]
         pred_probs = F.softmax(pred, dim=0)
-        pred = [{"digit": i, "prob": f'{prob*100:.2f}%', 'logits': pred[i]} for i, prob in enumerate(pred_probs)]
+        pred = [{"digit": i, "conf": f'{prob*100:.2f}%', 'logits': pred[i]} for i, prob in enumerate(pred_probs)]
         pred = sorted(pred, key=lambda ele: ele['digit'], reverse=False)
-    return pred
+    return pred_probs
 
