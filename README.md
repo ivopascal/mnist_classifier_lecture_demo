@@ -1,3 +1,10 @@
+# Demo for Machine Learning Practical lecture
+This repository follows a lecture for the Machine Learning Practical.
+It may be used as reference material on FastAPI and Streamlit.
+
+For the actual project please follow the [original repository](https://github.com/arun477/mnist_classifier)
+
+
 ---
 title: Mnist
 emoji: 🐢
