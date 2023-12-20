@@ -13,6 +13,7 @@ torchvision = "*"
 datasets = "*"
 matplotlib = "*"
 python-multipart = "*"
+streamlit = "*"
 
 [dev-packages]
 

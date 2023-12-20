@@ -1,3 +1,5 @@
+# FastAPI endpoint written by Ivo
+
 from typing import List
 
 import PIL
@@ -11,11 +13,20 @@ from starlette.responses import RedirectResponse
 import mnist_classifier
 
 
+class DigitConfidence(BaseModel):
+    digit: int = 7
+    confidence: float = 0.2
+
+
+class DigitPredictions(BaseModel):
+    predictions: List[DigitConfidence]
+
+
 app = FastAPI(
     title="Handwritten Digit Classifier",
     summary="An API endpoint to classify handwritten digits using a CNN. Trained on MNIST.",
     description="""
-An API endpoint to access a CNN trained on MNIST.
+# An API endpoint to access a CNN trained on MNIST.
 # Model usage
 The model is trained on 28x28 images of handwritten digits. 
 Consequently, it is designed to receive images that are mostly square and cover exactly 1 digit.
@@ -36,6 +47,11 @@ async def root():
     return RedirectResponse(url='/docs')
 
 
+@app.get("/hello_world", description="Hello world endpoint.")
+async def hello_world():
+    return "Hello world!"
+
+
 def process_image(file):
     image = Image.open(file.file)
     image = image.resize((28, 28))  # Resize to MNIST image size
@@ -46,18 +62,9 @@ def process_image(file):
     return torch.from_numpy(image).float().reshape(1, 28, 28), raw_image
 
 
-class DigitConfidence(BaseModel):
-    digit: int = 7
-    confidence: float = 0.2
-
-
-class DigitPredictions(BaseModel):
-    predictions: List[DigitConfidence]
-
-
 @app.post("/predict", description="Image classifier endpoint. Add {'image': binary_image} to json body to send "
                                   "request. Image should be a black handwritten digit against a white background. "
-                                  "Returns class probabilities.",
+                                  "Returns class confidences.",
           response_model=DigitPredictions,
           response_description="Confidence for each of the possible digits 0-9. Confidences range from 0-1.")
 async def predict(image: UploadFile):
